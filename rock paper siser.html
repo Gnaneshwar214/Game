@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rock Paper Scissors</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .mode-selection button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #2ecc71;
+      color: white;
+      transition: background 0.3s;
+    }
+
+    .mode-selection button:hover {
+      background-color: #27ae60;
+    }
+
+    .player {
+      margin: 20px 0;
+    }
+
+    .choices img {
+      width: 100px;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border: 2px solid transparent;
+      border-radius: 12px;
+    }
+
+    .choices img:hover {
+      transform: scale(1.1);
+      border-color: #3498db;
+    }
+
+    .result, .score {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #e67e22;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Rock Paper Scissors Game</h1>
+
+  <div class="mode-selection">
+    <button onclick="setMode('computer')">Play vs Computer</button>
+    <button onclick="setMode('player')">Play vs Player</button>
+  </div>
+
+  <div id="players-container">
+    <div class="player" id="player1">
+      <h2>Player 1</h2>
+      <div class="choices">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 06_58_28 PM.png" alt="Rock" onclick="choose('rock', 1)">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 07_09_57 PM.png" alt="Paper" onclick="choose('paper', 1)">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 07_11_46 PM.png" alt="Scissors" onclick="choose('scissors', 1)">
+      </div>
+    </div>
+
+    <div class="player" id="player2">
+      <h2>Player 2</h2>
+      <div class="choices">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 06_58_28 PM.png" onclick="choose('rock', 2)">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 07_09_57 PM.png" alt="Paper" onclick="choose('paper', 2)">
+        <img src="C:\Users\gnane\Downloads\ChatGPT Image May 26, 2025, 07_11_46 PM.png" alt="Scissors" onclick="choose('scissors', 2)">
+      </div>
+    </div>
+  </div>
+
+  <div class="result" id="result">Make your move!</div>
+  <div class="score">
+    Player 1: <span id="user-score">0</span> |
+    Player 2 / Computer: <span id="computer-score">0</span>
+  </div>
+
+  <script>
+    let mode = 'computer';
+    let userScore = 0;
+    let computerScore = 0;
+    let player1Choice = '';
+    let player2Choice = '';
+
+    function setMode(selectedMode) {
+      mode = selectedMode;
+      resetGame();
+
+      document.getElementById('result').textContent = 'Make your move!';
+      document.getElementById('player2').style.display = mode === 'player' ? 'block' : 'none';
+    }
+
+    function choose(choice, player) {
+      if (mode === 'computer') {
+        playVsComputer(choice);
+      } else {
+        playVsPlayer(choice, player);
+      }
+    }
+
+    function playVsComputer(userChoice) {
+      const computerChoice = ['rock', 'paper', 'scissors'][Math.floor(Math.random() * 3)];
+      evaluateResult(userChoice, computerChoice, false);
+    }
+
+    function playVsPlayer(choice, player) {
+      if (player === 1) {
+        player1Choice = choice;
+      } else {
+        player2Choice = choice;
+      }
+
+      if (player1Choice && player2Choice) {
+        evaluateResult(player1Choice, player2Choice, true);
+        player1Choice = '';
+        player2Choice = '';
+      }
+    }
+
+    function evaluateResult(choice1, choice2, isPvP) {
+      let result = '';
+
+      if (choice1 === choice2) {
+        result = "It's a draw!";
+      } else if (
+        (choice1 === 'rock' && choice2 === 'scissors') ||
+        (choice1 === 'paper' && choice2 === 'rock') ||
+        (choice1 === 'scissors' && choice2 === 'paper')
+      ) {
+        result = isPvP ? "Player 1 wins!" : `You win! ${choice1} beats ${choice2}`;
+        userScore++;
+      } else {
+        result = isPvP ? "Player 2 wins!" : `You lose! ${choice2} beats ${choice1}`;
+        computerScore++;
+      }
+
+      document.getElementById('result').textContent = result;
+      document.getElementById('user-score').textContent = userScore;
+      document.getElementById('computer-score').textContent = computerScore;
+    }
+
+    function resetGame() {
+      userScore = 0;
+      computerScore = 0;
+      player1Choice = '';
+      player2Choice = '';
+      document.getElementById('user-score').textContent = 0;
+      document.getElementById('computer-score').textContent = 0;
+    }
+
+    // Init
+    setMode('computer');
+  </script>
+
+</body>
+</html>
